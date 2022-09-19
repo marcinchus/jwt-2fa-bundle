@@ -9,7 +9,7 @@ namespace ConnectHolland\SecureJWTBundle\EventSubscriber;
 
 use ConnectHolland\SecureJWTBundle\Entity\TwoFactorUserInterface;
 use ConnectHolland\SecureJWTBundle\Event\SetupTwoFactorAuthenticationEvent;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Endroid\QrCode\Factory\QrCodeFactoryInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
@@ -20,16 +20,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LoginSubscriber implements EventSubscriberInterface
 {
-    private ManagerRegistry $doctrine;
+    private Registry $doctrine;
 
     private QrCodeFactoryInterface $qrCodeFactory;
 
     private GoogleAuthenticator $googleAuthenticator;
 
-    public function __construct(ManagerRegistry $doctrine, QrCodeFactoryInterface $qrCodeFactory, GoogleAuthenticator $googleAuthenticator)
-    {
-        $this->doctrine            = $doctrine;
-        $this->qrCodeFactory       = $qrCodeFactory;
+    public function __construct(
+        Registry $doctrine,
+        QrCodeFactoryInterface $qrCodeFactory,
+        ?GoogleAuthenticator $googleAuthenticator = null
+    ) {
+        $this->doctrine = $doctrine;
+        $this->qrCodeFactory = $qrCodeFactory;
         $this->googleAuthenticator = $googleAuthenticator;
     }
 
@@ -40,7 +43,7 @@ class LoginSubscriber implements EventSubscriberInterface
     {
         return [
             SetupTwoFactorAuthenticationEvent::NAME => 'provideQRCode',
-            Events::AUTHENTICATION_SUCCESS          => 'confirm2Fa',
+            Events::AUTHENTICATION_SUCCESS => 'confirm2Fa',
         ];
     }
 
@@ -59,14 +62,14 @@ class LoginSubscriber implements EventSubscriberInterface
         $this->setGoogleAuthenticatorSecret($event->getUser());
 
         $qrContent = $this->googleAuthenticator->getQRContent($event->getUser());
-        $qrCode    = $this->qrCodeFactory->create($qrContent, ['size' => 150]);
+        $qrCode = $this->qrCodeFactory->create($qrContent, ['size' => 150]);
 
         $event->setResponse(
             new JsonResponse(
                 [
-                    'result'  => 'ok',
+                    'result' => 'ok',
                     'message' => 'use provided QR code to set up two factor authentication',
-                    'qr'      => $qrCode->writeDataUri(),
+                    'qr' => $qrCode->writeDataUri(),
                 ],
                 Response::HTTP_OK
             )
