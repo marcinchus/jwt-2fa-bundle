@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace ConnectHolland\SecureJWTBundle\Security\Guard;
 
 use ConnectHolland\SecureJWTBundle\Entity\InvalidToken;
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\ExpiredTokenException;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\InvalidTokenException;
@@ -24,9 +24,9 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class JWTTokenAuthenticator extends BaseAuthenticator
 {
-    private Registry $doctrine;
+    private ManagerRegistry $doctrine;
 
-    public function __construct(Registry $doctrine, JWTTokenManagerInterface $jwtManager, EventDispatcherInterface $dispatcher, TokenExtractorInterface $tokenExtractor)
+    public function __construct(ManagerRegistry $doctrine, JWTTokenManagerInterface $jwtManager, EventDispatcherInterface $dispatcher, TokenExtractorInterface $tokenExtractor)
     {
         parent::__construct($jwtManager, $dispatcher, $tokenExtractor);
 

@@ -14,7 +14,7 @@ use ConnectHolland\SecureJWTBundle\Exception\TwoFactorSecretNotSetupException;
 use ConnectHolland\SecureJWTBundle\Message\RecoverSecret;
 use ConnectHolland\SecureJWTBundle\Security\Guard\JWTTokenAuthenticator;
 use ConnectHolland\SecureJWTBundle\Security\Token\TwoFactorJWTToken;
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
@@ -41,9 +41,9 @@ class TwoFactorJWTProvider extends DaoAuthenticationProvider
 
     private JWTTokenAuthenticator $JWTTokenAuthenticator;
 
-    private Registry $doctrine;
+    private ManagerRegistry $doctrine;
 
-    public function __construct(UserProviderInterface $userProvider, UserCheckerInterface $userChecker, EncoderFactoryInterface $encoderFactory, GoogleAuthenticatorInterface $googleAuthenticator, MessageBusInterface $messageBus, JWTEncoderInterface $jwtEncoder, RequestStack $requestStack, JWTTokenAuthenticator $JWTTokenAuthenticator, Registry $doctrine, bool $hideUserNotFoundExceptions = true)
+    public function __construct(UserProviderInterface $userProvider, UserCheckerInterface $userChecker, EncoderFactoryInterface $encoderFactory, GoogleAuthenticatorInterface $googleAuthenticator, MessageBusInterface $messageBus, JWTEncoderInterface $jwtEncoder, RequestStack $requestStack, JWTTokenAuthenticator $JWTTokenAuthenticator, ManagerRegistry $doctrine, bool $hideUserNotFoundExceptions = true)
     {
         parent::__construct($userProvider, $userChecker, 'two_factor_jwt', $encoderFactory, $hideUserNotFoundExceptions);
 
