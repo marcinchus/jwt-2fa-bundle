@@ -21,14 +21,15 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class JWTTokenAuthenticator extends BaseAuthenticator
 {
     private ManagerRegistry $doctrine;
 
-    public function __construct(ManagerRegistry $doctrine, JWTTokenManagerInterface $jwtManager, EventDispatcherInterface $dispatcher, TokenExtractorInterface $tokenExtractor)
+    public function __construct(ManagerRegistry $doctrine, JWTTokenManagerInterface $jwtManager, EventDispatcherInterface $dispatcher, TokenExtractorInterface $tokenExtractor, TokenStorageInterface $preAuthenticationTokenStorage)
     {
-        parent::__construct($jwtManager, $dispatcher, $tokenExtractor);
+        parent::__construct($jwtManager, $dispatcher, $tokenExtractor, $preAuthenticationTokenStorage);
 
         $this->doctrine = $doctrine;
     }
