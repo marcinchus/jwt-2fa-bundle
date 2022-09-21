@@ -54,7 +54,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
         $data                  = json_decode($jsonWithToken->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $decoded               = $this->jwtEncoder->decode($data['token']);
         $this->responsePayload = array_merge($this->responsePayload, $decoded);
-        $response              = new JsonResponse(['result' => 'ok', 'payload' => $this->responsePayload]);
+        $response              = new JsonResponse(['result' => 'ok', 'payload' => $this->responsePayload, '2fa_complete' => false]);
         $response->headers->setCookie(new Cookie('BEARER', $data['token'], $decoded['exp'], '/', null, true, true, false, $this->sameSite));
 
         return $response;
