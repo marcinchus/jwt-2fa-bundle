@@ -13,6 +13,7 @@
         "api-platform/core": "^2.5",
         "scheb/2fa-bundle": "^v5.13",
         "scheb/2fa-google-authenticator": "^v5.13",
+        "scheb/2fa-email": "^v5.13",
         "endroid/qr-code-bundle": "^3.4",
         "friendsofsymfony/rest-bundle": "^3.0",
         "laminas/laminas-zendframework-bridge": "^1.4"
